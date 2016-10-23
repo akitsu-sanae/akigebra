@@ -82,6 +82,16 @@ struct matrix {
         return result;
     }
 
+    template<typename F>
+    this_type map(F&& f) const {
+        this_type result = *this;
+        for (int y=0; y<Height; y++) {
+            for (int x=0; x<Width; x++)
+                result.at(x, y) = f(at(x, y));
+        }
+        return result;
+    }
+
     matrix<value_type, Height, Width> transpose() const {
         matrix<value_type, Height, Width> result;
         for (int y=0; y<Height; y++) {
