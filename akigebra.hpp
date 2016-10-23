@@ -115,6 +115,7 @@ struct matrix {
     struct not_squared_exception {};
     struct not_symmetry_exception {};
     struct not_orthogonal_exception {};
+    struct not_regular_exception {};
 
     static bool is_squared() {
         return Width == Height;
@@ -139,8 +140,17 @@ struct matrix {
     bool is_unitary() const {
         return this->adjoint() * *this == this_type::identity();
     }
-    bool is_regular() const {
+
+    // (A^*) * A == A * (A^*)
+    bool is_normal() const {
         return *this * this->adjoint() == this->adjoint() * *this;
+    }
+    bool is_regular() const {
+        if (!is_squared())
+            return false;
+        if (determinant() == static_cast<value_type>(0))
+            return false;
+        return true;
     }
     bool is_upper_triangular() const {
         for (int i=0; i<Width; i++) {
@@ -223,6 +233,19 @@ struct matrix {
         auto result = static_cast<value_type>(0);
         for (int i=0; i<Width; i++)
             result += at(i, i);
+        return result;
+    }
+
+    this_type inverse() const {
+        if (!is_regular())
+            throw not_regular_exception{};
+        this_type result = {};
+        auto det = determinant();
+        for (int x=0; x<Width; x++) {
+            for (int y=0; y<Height; y++) {
+                result.at(x, y) = cofactor(y, x) / det;
+            }
+        }
         return result;
     }
 
