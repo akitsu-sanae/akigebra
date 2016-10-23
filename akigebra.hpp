@@ -13,6 +13,7 @@
 #include <cmath>
 #include <array>
 #include <tuple>
+#include <complex>
 #include <iostream>
 
 namespace akigebra {
@@ -219,6 +220,14 @@ struct determinant_impl<T, 1, 1> {
 template<typename T, std::size_t W, std::size_t H>
 inline T matrix<T, W, H>::determinant() const {
     return detail::determinant_impl<T, W, H>{*this}.calc();
+}
+
+template<typename T, std::size_t W, std::size_t H>
+inline matrix<T, W, H>
+conj(matrix<T, W, H> const& input) {
+    return input.map([](T const& e) {
+            return std::conj(e);
+            });
 }
 
 template<typename T, std::size_t W, std::size_t H>

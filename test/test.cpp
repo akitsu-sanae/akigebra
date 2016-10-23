@@ -41,5 +41,15 @@ int main() {
     std::tie(CL, CU) = C.lu_decompose();
     std::cout << C << " => LU decompose " << std::endl;
     std::cout << CL << " * " << CU << std::endl;
+
+    using namespace std;
+    auto D = matrix<std::complex<int>, 2, 2> {
+        complex<int>{1, 2}, complex<int>{3, 2},
+        complex<int>{-1, -2}, complex<int>{5, -4}
+    };
+    std::cout << "D" << std::endl;
+    std::cout << D << std::endl;
+    std::cout << "D's adjoint matrix" << std::endl;
+    std::cout << adjoint(D) << std::endl;
 }
 
