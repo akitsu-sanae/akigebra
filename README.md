@@ -2,6 +2,8 @@
 
 Akigebra is Akitsu's Algebra Library.
 
+Note: this library is not practical!!
+
 # How to use
 Akigebra is header only library.
 All you must do is `#include "akigebra.hpp"`
