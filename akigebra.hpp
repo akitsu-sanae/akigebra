@@ -142,6 +142,40 @@ struct matrix {
     bool is_regular() const {
         return *this * this->adjoint() == this->adjoint() * *this;
     }
+    bool is_upper_triangular() const {
+        for (int i=0; i<Width; i++) {
+            for (int j=i+1; j<Height; j++) {
+                if (at(i, j) != static_cast<value_type>(0))
+                    return false;
+            }
+        }
+        return true;
+    }
+    bool is_lower_triangular() const {
+        for (int i=0; i<Width; i++) {
+            for (int j=0; j<i; j++) {
+                if (at(i, j) != static_cast<value_type>(0))
+                    return false;
+            }
+        }
+        return true;
+    }
+    bool is_triangular() const {
+        return is_upper_triangular() || is_lower_triangular();
+    }
+    bool is_diagonal() const {
+        if (!is_squared())
+            throw not_squared_exception{};
+        for (int x=0; x<Width; x++) {
+            for (int y=0; y<Height; y++) {
+                if (x == y)
+                    continue;
+                if (at(x, y) != static_cast<value_type>(0))
+                    return false;
+            }
+        }
+        return true;
+    }
 
     static matrix<value_type, Width, Height> identity() {
         if (!is_squared())

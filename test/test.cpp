@@ -41,6 +41,8 @@ int main() {
     std::tie(CL, CU) = C.lu_decompose();
     std::cout << C << " => LU decompose " << std::endl;
     std::cout << CL << " * " << CU << std::endl;
+    std::cout << CL.is_lower_triangular() << std::endl;
+    std::cout << CU.is_upper_triangular() << std::endl;
 
     using namespace std;
     auto D = matrix<std::complex<int>, 2, 2> {
@@ -58,5 +60,13 @@ int main() {
 
     std::cout << (A*2 + B*3).trace() << " == " << 2*A.trace() + 3*B.trace() << std::endl;
     std::cout << (A*B).trace() << " == " << (B*A).trace() << std::endl;
+
+    auto E = matrix<int, 3, 3> {{
+        3, 0, 0,
+        0, 4, 0,
+        0, 0, 9
+    }};
+    std::cout << E << std::endl;
+    std::cout << E.is_diagonal() << std::endl;
 }
 
