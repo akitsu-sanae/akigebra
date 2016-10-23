@@ -55,5 +55,8 @@ int main() {
     std::cout << D.adjoint() << std::endl;
     std::cout << D.is_hermitian() << std::endl;
     std::cout << D.is_unitary() << std::endl;
+
+    std::cout << (A*2 + B*3).trace() << " == " << 2*A.trace() + 3*B.trace() << std::endl;
+    std::cout << (A*B).trace() << " == " << (B*A).trace() << std::endl;
 }
 

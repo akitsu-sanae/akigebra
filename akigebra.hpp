@@ -173,6 +173,14 @@ struct matrix {
     }
 
     value_type determinant() const;
+    value_type trace() const {
+        if (!is_squared())
+            throw not_squared_exception{};
+        auto result = static_cast<value_type>(0);
+        for (int i=0; i<Width; i++)
+            result += at(i, i);
+        return result;
+    }
 
     std::tuple<this_type, this_type> lu_decompose() const {
         auto result = lu_decompose_impl(0, *this);
