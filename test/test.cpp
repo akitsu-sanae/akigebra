@@ -49,7 +49,9 @@ int main() {
     };
     std::cout << "D" << std::endl;
     std::cout << D << std::endl;
+    std::cout << "S's conj matrix" << std::endl;
+    std::cout << conj(D) << std::endl;
     std::cout << "D's adjoint matrix" << std::endl;
-    std::cout << adjoint(D) << std::endl;
+    std::cout << D.adjoint() << std::endl;
 }
 

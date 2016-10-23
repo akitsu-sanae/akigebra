@@ -18,6 +18,11 @@
 
 namespace akigebra {
 
+template<typename, std::size_t, std::size_t H> struct matrix;
+
+template<typename T, std::size_t W, std::size_t H>
+matrix<T, W, H> conj(matrix<T, W, H> const&);
+
 template<typename T, std::size_t W, std::size_t H>
 struct matrix {
     using value_type = T;
@@ -101,6 +106,10 @@ struct matrix {
             }
         }
         return result;
+    }
+
+    this_type adjoint() const {
+        return conj(*this).transpose();
     }
 
     struct not_squared_exception {};
