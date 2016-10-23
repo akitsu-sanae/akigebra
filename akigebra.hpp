@@ -186,6 +186,16 @@ struct matrix {
         return result;
     }
 
+    value_type minor_det(int x, int y) const {
+        return child(x, y).determinant();
+    }
+    value_type cofactor(int x, int y) const {
+        if ((x+y)%2 ==0)
+            return minor_det(x, y);
+        else
+            return -minor_det(x, y);
+    }
+
     matrix<value_type, Width-1, Height-1> child(int x, int y) const {
         if (!is_squared())
             throw not_squared_exception{};
