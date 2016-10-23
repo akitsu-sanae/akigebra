@@ -133,6 +133,15 @@ struct matrix {
         auto tmp = (*this) * this->transpose();
         return tmp == matrix<value_type, Width, Height>::identity();
     }
+    bool is_hermitian() const {
+        return *this == this->adjoint();
+    }
+    bool is_unitary() const {
+        return this->adjoint() * *this == this_type::identity();
+    }
+    bool is_regular() const {
+        return *this * this->adjoint() == this->adjoint() * *this;
+    }
 
     static matrix<value_type, Width, Height> identity() {
         if (!is_squared())

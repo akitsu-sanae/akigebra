@@ -53,5 +53,7 @@ int main() {
     std::cout << conj(D) << std::endl;
     std::cout << "D's adjoint matrix" << std::endl;
     std::cout << D.adjoint() << std::endl;
+    std::cout << D.is_hermitian() << std::endl;
+    std::cout << D.is_unitary() << std::endl;
 }
 
