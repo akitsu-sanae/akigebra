@@ -33,14 +33,14 @@ struct matrix {
 
     struct invalid_index_exception {};
 
-    value_type const& at(int x, int y) const {
+    value_type const& at(std::size_t x, std::size_t y) const {
         if (x < 0 || x > Width)
             throw invalid_index_exception{};
         if (y < 0 || y > Height)
             throw invalid_index_exception{};
         return elems[y][x];
     }
-    value_type& at(int x, int y) {
+    value_type& at(std::size_t x, std::size_t y) {
         if (x < 0 || x > Width)
             throw invalid_index_exception{};
         if (y < 0 || y > Height)
@@ -51,8 +51,8 @@ struct matrix {
 
     this_type operator+(this_type const& rhs) const {
         this_type result = *this;
-        for (int y=0; y<Height; y++) {
-            for (int x=0; x<Width; x++) {
+        for (std::size_t y=0; y<Height; y++) {
+            for (std::size_t x=0; x<Width; x++) {
                 result.at(x, y) += rhs.at(x, y);
             }
         }
@@ -60,8 +60,8 @@ struct matrix {
     }
     this_type operator-(this_type const& rhs) const {
         this_type result = *this;
-        for (int y=0; y<Height; y++) {
-            for (int x=0; x<Width; x++) {
+        for (std::size_t y=0; y<Height; y++) {
+            for (std::size_t x=0; x<Width; x++) {
                 result.at(x, y) -= rhs.at(x, y);
             }
         }
@@ -71,9 +71,9 @@ struct matrix {
     template<std::size_t I>
     matrix<value_type, I, Height> operator*(matrix<value_type, I, Width> const& rhs) const {
         matrix<value_type, I, Height> result = {};
-        for (int y=0; y<Height; y++) {
-            for (int x=0; x<I; x++) {
-                for (int i=0; i<Width; i++)
+        for (std::size_t y=0; y<Height; y++) {
+            for (std::size_t x=0; x<I; x++) {
+                for (std::size_t i=0; i<Width; i++)
                     result.at(x, y) += this->at(i, y) * rhs.at(x, i);
             }
         }
@@ -81,8 +81,8 @@ struct matrix {
     }
     matrix<value_type, Width, Height> operator*(value_type const& rhs) const {
         matrix<value_type, Width, Height> result = *this;
-        for (int y=0; y<Height; y++) {
-            for (int x=0; x<Width; x++) {
+        for (std::size_t y=0; y<Height; y++) {
+            for (std::size_t x=0; x<Width; x++) {
                 result.at(x, y) *= rhs;
             }
         }
@@ -90,8 +90,8 @@ struct matrix {
     }
     matrix<value_type, Width, Height> operator/(value_type const& rhs) const {
         matrix<value_type, Width, Height> result = *this;
-        for (int y=0; y<Height; y++) {
-            for (int x=0; x<Width; x++) {
+        for (std::size_t y=0; y<Height; y++) {
+            for (std::size_t x=0; x<Width; x++) {
                 result.at(x, y) /= rhs;
             }
         }
@@ -99,8 +99,8 @@ struct matrix {
     }
 
     this_type& operator=(this_type const& rhs) {
-        for (int x=0; x<Width; x++) {
-            for (int y=0; y<Height; y++)
+        for (std::size_t x=0; x<Width; x++) {
+            for (std::size_t y=0; y<Height; y++)
                 at(x, y) = rhs.at(x, y);
         }
         return *this;
@@ -126,8 +126,8 @@ struct matrix {
     template<typename F>
     this_type map(F&& f) const {
         this_type result = *this;
-        for (int y=0; y<Height; y++) {
-            for (int x=0; x<Width; x++)
+        for (std::size_t y=0; y<Height; y++) {
+            for (std::size_t x=0; x<Width; x++)
                 result.at(x, y) = f(at(x, y));
         }
         return result;
@@ -135,8 +135,8 @@ struct matrix {
 
     matrix<value_type, Height, Width> transpose() const {
         matrix<value_type, Height, Width> result;
-        for (int y=0; y<Height; y++) {
-            for (int x=0; x<Width; x++) {
+        for (std::size_t y=0; y<Height; y++) {
+            for (std::size_t x=0; x<Width; x++) {
                 result.at(y, x) = this->at(x, y);
             }
         }
@@ -156,8 +156,8 @@ struct matrix {
         return Width == Height;
     }
     bool is_symmetry() const {
-        for (int y=0; y<Height; y++) {
-            for (int x=y+1; x<Width; x++) {
+        for (std::size_t y=0; y<Height; y++) {
+            for (std::size_t x=y+1; x<Width; x++) {
                 if (at(x, y) != at(y, x))
                     return false;
             }
@@ -188,8 +188,8 @@ struct matrix {
         return true;
     }
     bool is_upper_triangular() const {
-        for (int i=0; i<Width; i++) {
-            for (int j=i+1; j<Height; j++) {
+        for (std::size_t i=0; i<Width; i++) {
+            for (std::size_t j=i+1; j<Height; j++) {
                 if (at(i, j) != static_cast<value_type>(0))
                     return false;
             }
@@ -197,8 +197,8 @@ struct matrix {
         return true;
     }
     bool is_lower_triangular() const {
-        for (int i=0; i<Width; i++) {
-            for (int j=0; j<i; j++) {
+        for (std::size_t i=0; i<Width; i++) {
+            for (std::size_t j=0; j<i; j++) {
                 if (at(i, j) != static_cast<value_type>(0))
                     return false;
             }
@@ -211,8 +211,8 @@ struct matrix {
     bool is_diagonal() const {
         if (!is_squared())
             throw not_squared_exception{};
-        for (int x=0; x<Width; x++) {
-            for (int y=0; y<Height; y++) {
+        for (std::size_t x=0; x<Width; x++) {
+            for (std::size_t y=0; y<Height; y++) {
                 if (x == y)
                     continue;
                 if (at(x, y) != static_cast<value_type>(0))
@@ -226,31 +226,31 @@ struct matrix {
         if (!is_squared())
             throw not_squared_exception{};
         matrix<value_type, Width, Height> result = {{}};
-        for (int i=0; i<Width; i++)
+        for (std::size_t i=0; i<Width; i++)
             result.at(i, i) = static_cast<value_type>(1.0);
         return result;
     }
 
-    value_type minor_det(int x, int y) const {
+    value_type minor_det(std::size_t x, std::size_t y) const {
         return child(x, y).determinant();
     }
-    value_type cofactor(int x, int y) const {
+    value_type cofactor(std::size_t x, std::size_t y) const {
         if ((x+y)%2 ==0)
             return minor_det(x, y);
         else
             return -minor_det(x, y);
     }
 
-    matrix<value_type, Width-1, Height-1> child(int x, int y) const {
+    matrix<value_type, Width-1, Height-1> child(std::size_t x, std::size_t y) const {
         if (!is_squared())
             throw not_squared_exception{};
         matrix<value_type, Width-1, Height-1> result;
-        int ty = 0;
-        for (int y_=0; y_<Height; y_++) {
+        std::size_t ty = 0;
+        for (std::size_t y_=0; y_<Height; y_++) {
             if (y_ == y)
                 continue;
-            int tx = 0;
-            for (int x_=0; x_<Width; x_++) {
+            std::size_t tx = 0;
+            for (std::size_t x_=0; x_<Width; x_++) {
                 if (x_ == x)
                     continue;
                 result.at(tx, ty) = at(x_, y_);
@@ -266,7 +266,7 @@ struct matrix {
         if (!is_squared())
             throw not_squared_exception{};
         auto result = static_cast<value_type>(0);
-        for (int i=0; i<Width; i++)
+        for (std::size_t i=0; i<Width; i++)
             result += at(i, i);
         return result;
     }
@@ -276,8 +276,8 @@ struct matrix {
             throw not_regular_exception{};
         this_type result = {};
         auto det = determinant();
-        for (int x=0; x<Width; x++) {
-            for (int y=0; y<Height; y++) {
+        for (std::size_t x=0; x<Width; x++) {
+            for (std::size_t y=0; y<Height; y++) {
                 result.at(x, y) = cofactor(y, x) / det;
             }
         }
@@ -288,8 +288,8 @@ struct matrix {
         auto result = lu_decompose_impl(0, *this);
         this_type L = this_type::identity();
         this_type U = {{}};
-        for (int i=0; i<Width; i++) {
-            for (int j=0; j<Height; j++) {
+        for (std::size_t i=0; i<Width; i++) {
+            for (std::size_t j=0; j<Height; j++) {
                 if (i < j)
                     L.at(i, j) = result.at(i, j);
                 else
@@ -299,15 +299,15 @@ struct matrix {
         return std::make_tuple(L, U);
     }
 
-    this_type lu_decompose_impl(int n, this_type buf) const {
+    this_type lu_decompose_impl(std::size_t n, this_type buf) const {
         if (!is_squared())
             throw not_squared_exception{};
         if (n == Width)
             return buf;
-        for (int j=n+1; j<Height; j++)
+        for (std::size_t j=n+1; j<Height; j++)
             buf.at(n, j) /= buf.at(n, n);
-        for (int i=n+1; i<Width; i++) {
-            for (int j=n+1; j<Height; j++)
+        for (std::size_t i=n+1; i<Width; i++) {
+            for (std::size_t j=n+1; j<Height; j++)
                 buf.at(i, j) -= buf.at(n, j)*buf.at(j, n);
         }
         return lu_decompose_impl(n+1, buf);
@@ -326,8 +326,8 @@ struct determinant_impl {
         if (!data.is_squared())
             throw typename matrix<T, W, H>::not_squared_exception{};
         auto result = static_cast<value_type>(0);
-        int k = 1;
-        for (int i=0; i<W; i++) {
+        std::size_t k = 1;
+        for (std::size_t i=0; i<W; i++) {
             result += k*data.at(0, i) * data.child(0, i).determinant();
             k *= -1;
         }
@@ -394,7 +394,7 @@ using vector = matrix<T, 1, H>;
 template<typename T, std::size_t N>
 static inline T norm(akigebra::vector<T, N> const& v) {
     auto result = static_cast<typename akigebra::vector<T, N>::value_type>(0);
-    for (int i=0; i<N; i++)
+    for (std::size_t i=0; i<N; i++)
         result += v.at(0, i) * v.at(0, i);
     return std::sqrt(result);
 }
@@ -403,9 +403,9 @@ template<typename T, std::size_t N>
 static inline std::vector<vector<T, N>>
 orthogonalization(std::vector<vector<T, N>> const& input) {
     std::vector<vector<T, N>> result(input.size());
-    for (int i=0; i<N; i++) {
+    for (std::size_t i=0; i<N; i++) {
         result.at(i) = input.at(i);
-        for (int j=0; j<i; j++) {
+        for (std::size_t j=0; j<i; j++) {
             auto k = input.at(i).transpose() * result.at(j);
             result.at(i) -= result.at(j) * k;
         }
