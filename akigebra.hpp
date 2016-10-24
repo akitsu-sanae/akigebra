@@ -12,6 +12,7 @@
 #include <cstddef>
 #include <cmath>
 #include <array>
+#include <vector>
 #include <tuple>
 #include <complex>
 #include <iostream>
@@ -355,6 +356,32 @@ inline static std::ostream& operator<<(std::ostream& os, matrix<T, W, H> const& 
         std::cout << std::endl;
     }
     return os;
+}
+
+template<typename T, std::size_t H>
+using vector = matrix<T, 1, H>;
+
+template<typename T, std::size_t N>
+static inline T norm(akigebra::vector<T, N> const& v) {
+    auto result = static_cast<typename akigebra::vector<T, N>::value_type>(0);
+    for (int i=0; i<N; i++)
+        result += v.at(0, i) * v.at(0, i);
+    return std::sqrt(result);
+}
+
+template<typename T, std::size_t N>
+static inline std::vector<vector<T, N>>
+orthogonalization(std::vector<vector<T, N>> const& input) {
+    std::vector<vector<T, N>> result(input.size());
+    for (int i=0; i<N; i++) {
+        result.at(i) = input.at(i);
+        for (int j=0; j<i; j++) {
+            auto k = input.at(i).transpose() * result.at(j);
+            result.at(i) = result.at(i) - result.at(j) * k;
+        }
+        result.at(i) = result.at(i) / norm(result.at(i));
+    }
+    return result;
 }
 
 }

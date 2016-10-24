@@ -73,5 +73,14 @@ int main() {
         -1.0, 3.0, 1.0,
         4.0, 2.0, 1.0
     }}.inverse() << std::endl;
+
+    std::vector<akigebra::vector<double, 3>> nyan = {
+            akigebra::vector<double, 3>{{1.0, 1.0, 1.0}},
+            akigebra::vector<double, 3>{{1.0, -1.0, 2.0}},
+            akigebra::vector<double, 3>{{-1.0, 1.0, 3.0}}
+            };
+    auto oth = orthogonalization(nyan);
+    for (auto const& v: oth)
+        std::cout << v << std::endl;
 }
 
