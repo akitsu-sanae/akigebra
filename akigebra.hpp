@@ -98,6 +98,31 @@ struct matrix {
         return result;
     }
 
+    this_type& operator=(this_type const& rhs) {
+        for (int x=0; x<Width; x++) {
+            for (int y=0; y<Height; y++)
+                at(x, y) = rhs.at(x, y);
+        }
+        return *this;
+    }
+
+    this_type& operator+=(this_type const& rhs) {
+        *this = *this + rhs;
+        return *this;
+    }
+    this_type& operator-=(this_type const& rhs) {
+        *this = *this - rhs;
+        return *this;
+    }
+    this_type& operator*=(value_type const& rhs) {
+        *this = *this * rhs;
+        return *this;
+    }
+    this_type& operator/=(value_type const& rhs) {
+        *this = *this / rhs;
+        return *this;
+    }
+
     template<typename F>
     this_type map(F&& f) const {
         this_type result = *this;
@@ -334,6 +359,11 @@ conj(matrix<T, W, H> const& input) {
 }
 
 template<typename T, std::size_t W, std::size_t H>
+inline static matrix<T, W, H> operator*(T const& lhs, matrix<T, W, H> const& rhs) {
+    return rhs * lhs;
+}
+
+template<typename T, std::size_t W, std::size_t H>
 inline static bool operator==(matrix<T, W, H> const& lhs, matrix<T, W, H> const& rhs) {
     for (std::size_t y=0; y<H; y++) {
         for (std::size_t x=0; x<W; x++) {
@@ -377,9 +407,9 @@ orthogonalization(std::vector<vector<T, N>> const& input) {
         result.at(i) = input.at(i);
         for (int j=0; j<i; j++) {
             auto k = input.at(i).transpose() * result.at(j);
-            result.at(i) = result.at(i) - result.at(j) * k;
+            result.at(i) -= result.at(j) * k;
         }
-        result.at(i) = result.at(i) / norm(result.at(i));
+        result.at(i) /= norm(result.at(i));
     }
     return result;
 }
