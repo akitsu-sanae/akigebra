@@ -57,6 +57,15 @@ struct matrix {
         }
         return result;
     }
+    this_type operator-(this_type const& rhs) const {
+        this_type result = *this;
+        for (int y=0; y<Height; y++) {
+            for (int x=0; x<Width; x++) {
+                result.at(x, y) -= rhs.at(x, y);
+            }
+        }
+        return result;
+    }
 
     template<std::size_t I>
     matrix<value_type, I, Height> operator*(matrix<value_type, I, Width> const& rhs) const {
